@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
@@ -26,6 +28,9 @@ public class CalculatorTest {
     private Calculator calculator;
     @Mock
     private CalculatorService calculatorService;
+    @Spy
+    private List<Integer> spiedList;
+
 
     @Test
     void performAdditionTest() {
@@ -70,6 +75,22 @@ public class CalculatorTest {
 
         assertEquals(5,calculator.performAddition(2,3));
         verify(calculatorService).add(2,3);
+    }
+
+    @Test
+    void testSpy(){
+       spiedList= Mockito.spy(new ArrayList<>());
+       /*
+         spiedList=new ArrayList<>();-> this is wrong.
+         it will be a normal object.
+         So stubbing won't work.
+         */
+        spiedList.add(1);
+        spiedList.add(2);
+        assertEquals(2, spiedList.size());
+       //when(spiedList.size()).thenReturn(100);
+        doReturn(100).when(spiedList).size();
+        assertEquals(100, spiedList.size());
     }
 
 
